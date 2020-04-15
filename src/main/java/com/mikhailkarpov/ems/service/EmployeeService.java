@@ -32,22 +32,25 @@ public class EmployeeService {
     }
 
     public List<EmployeeDTO> search(String searchQuery) {
-        LOGGER.info("Searching employees: {}", searchQuery);
+        LOGGER.debug("Searching employees: {}", searchQuery);
         List<Employee> employees = employeeRepository.searchBy(searchQuery);
         return toDTO(employees);
     }
 
     public EmployeeDTO findById(Long id) {
+        LOGGER.debug("Searching for employee with id=" + id);
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found by id=" + id));
         return toDTO(employee);
     }
 
     public void save(EmployeeDTO employee) {
+        LOGGER.debug("Saving {}", employee);
         employeeRepository.save(toEntity(employee));
     }
 
     public void deleteById(Long id) {
+        LOGGER.debug("Deleting employee by id=" + id);
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found by id=" + id));
         employeeRepository.delete(employee);
