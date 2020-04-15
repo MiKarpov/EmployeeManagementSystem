@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/components.html :: header" />
+<body>
+
+<div th:replace="fragments/components.html :: navbar"></div>
+
+<div class="container">
+
+    <div th:if="${searchQuery != null}">
+        <h2>Search result for &apos;<span th:text="${searchQuery}" />&apos;</h2>
+    </div>
+    <div th:unless="${searchQuery != null}">
+        <h2>Employees list</h2>
+        <a class="btn btn-primary" th:href="@{/employee/add}">Add new employee</a>
+    </div>
+
+    <table th:replace="fragments/components.html :: employeesTable"></table>
+</div>
+
+</body>
+</html>

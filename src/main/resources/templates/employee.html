@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Management System</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container">
+    <div>
+        <h2 th:if="${employee.id == null}">Add new employee</h2>
+        <h2 th:if="${employee.id != null}">Edit employee</h2>
+
+        <form action="#" th:action="@{/employee}" th:object="${employee}" method="post">
+            <input type="hidden" th:field="${employee.id}"/>
+            <div class="form-group row" th:if="${employee.id != null}">
+                <label for="id" class="col-sm-2 col-form-label">
+                    #ID
+                </label>
+                <input id="id" type="text" readonly class="col-sm-10 form-control-plaintext" th:field="${employee.id}"/>
+            </div>
+            <div class="form-group row">
+                <label for="firstName" class="col-sm-2 col-form-label">
+                    First name</label>
+                <input id="firstName" class="col-sm-10 form-control" type="text" th:field="${employee.firstName}"/>
+            </div>
+            <div class="form-group row">
+                <label for="lastName" class="col-sm-2 col-form-label">
+                    Last name</label>
+                <input id="lastName" class="col-sm-10 form-control" type="text" th:field="${employee.lastName}"/>
+            </div>
+            <div class="form-group row">
+                <label for="email" class="col-sm-2 col-form-label">
+                    Email</label>
+                <input id="email" class="col-sm-10 form-control" type="text" th:field="${employee.email}"/>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                Save</button>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>
