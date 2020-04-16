@@ -6,7 +6,7 @@ public class EmployeeDTO {
     private String firstName;
     private String lastName;
     private String email;
-    private Position position;
+    private Role role;
 
     public Long getId() {
         return id;
@@ -40,22 +40,22 @@ public class EmployeeDTO {
         this.email = email;
     }
 
-    public Position getPosition() {
-        return position;
+    public Role getRole() {
+        return role;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override
     public String toString() {
         return "EmployeeDTO{" +
                 "id=" + id +
+                ", role=" + role +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", position=" + position +
                 '}';
     }
 }

@@ -22,36 +22,5 @@
     </div>
 </nav>
 
-<table th:fragment="employeesTable" class="table">
-    <thead>
-    <tr>
-        <th>#ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:if="${employees.isEmpty()}">
-        <td colspan="4">No employees available</td>
-    </tr>
-    <tr th:each="employee : ${employees}">
-        <td th:text="${employee.id}"></td>
-        <td th:text="${employee.firstName} + ' ' + ${employee.lastName}"></td>
-        <td th:text="${employee.email}"></td>
-        <td>
-            <div class="row">
-                        <span class="col"><a class="btn btn-success" th:href="@{/employee/{id}(id=${employee.id})}">
-                            Edit</a> </span>
-                <form class="col" action="#" th:action="@{/employee/deleteBy(id=${employee.id})}" method="post">
-                    <button type="submit" class="btn btn-danger">
-                        Delete</button>
-                </form>
-            </div>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
 </body>
 </html>

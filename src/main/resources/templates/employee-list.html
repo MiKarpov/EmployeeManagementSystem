@@ -8,14 +8,45 @@
 <div class="container">
 
     <div th:if="${searchQuery != null}">
-        <h2>Search result for &apos;<span th:text="${searchQuery}" />&apos;</h2>
+        <h2>Search Results for &apos;<span th:text="${searchQuery}" />&apos;</h2>
     </div>
     <div th:unless="${searchQuery != null}">
-        <h2>Employees list</h2>
+        <h2>List of Employees</h2>
         <a class="btn btn-primary" th:href="@{/employee/add}">Add new employee</a>
     </div>
 
-    <table th:replace="fragments/components.html :: employeesTable"></table>
+    <table th:fragment="employeesTable" class="table">
+        <thead>
+        <tr>
+            <th>#ID</th>
+            <th>Role</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${employees.isEmpty()}">
+            <td colspan="5">No employees added yet</td>
+        </tr>
+        <tr th:each="employee : ${employees}">
+            <td th:text="${employee.id}"></td>
+            <td th:text="${employee.role.label}"></td>
+            <td th:text="${employee.firstName} + ' ' + ${employee.lastName}"></td>
+            <td th:text="${employee.email}"></td>
+            <td>
+                <div class="row">
+                        <span class="col"><a class="btn btn-success" th:href="@{/employee/{id}(id=${employee.id})}">
+                            Edit</a> </span>
+                    <form class="col" action="#" th:action="@{/employee/deleteBy(id=${employee.id})}" method="post">
+                        <button type="submit" class="btn btn-danger">
+                            Delete</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 </body>

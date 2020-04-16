@@ -1,11 +1,13 @@
 package com.mikhailkarpov.ems.controller;
 
 import com.mikhailkarpov.ems.dto.EmployeeDTO;
+import com.mikhailkarpov.ems.dto.Role;
 import com.mikhailkarpov.ems.service.EmployeeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -57,5 +59,10 @@ public class EmployeeController {
     public String deleteEmployeeById(@RequestParam(required = true) Long id) {
         employeeService.deleteById(id);
         return "redirect:/employee";
+    }
+
+    @ModelAttribute
+    public void populateRoles(Model model) {
+        model.addAttribute("allRoles", Arrays.asList(Role.ALL));
     }
 }

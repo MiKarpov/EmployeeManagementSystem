@@ -16,7 +16,7 @@ public class EmployeeDetails {
     private String email;
 
     protected EmployeeDetails() {
-
+        // for JPA
     }
 
     public EmployeeDetails(String firstName, String lastName, String email) {

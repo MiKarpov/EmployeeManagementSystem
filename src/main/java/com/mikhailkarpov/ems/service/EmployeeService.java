@@ -58,9 +58,10 @@ public class EmployeeService {
 
     private EmployeeDTO toDTO(Employee employee) {
         EmployeeDetails details = employee.getDetails();
-
         EmployeeDTO employeeDTO = new EmployeeDTO();
+
         employeeDTO.setId(employee.getId());
+        employeeDTO.setRole(employee.getRole());
         employeeDTO.setFirstName(details.getFirstName());
         employeeDTO.setLastName(details.getLastName());
         employeeDTO.setEmail(details.getEmail());
@@ -83,6 +84,6 @@ public class EmployeeService {
         String email = employeeDTO.getEmail();
         EmployeeDetails details = new EmployeeDetails(firstName, lastName, email);
 
-        return new Employee(employeeDTO.getId(), details);
+        return new Employee(employeeDTO.getId(), details, employeeDTO.getRole());
     }
 }
