@@ -14,9 +14,9 @@
 
 <nav th:fragment="navbar" class="navbar navbar-expand-sm navbar-light bg-light mb-5">
     <div class="container">
-        <a class="navbar-brand" href="#">Employee Management System</a>
+        <a class="navbar-brand" th:href="@{/employee}">Employee Management System</a>
         <form action="/employee" method="get" class="form-inline">
-            <input type="text" name="searchQuery" class="form-control mr-2" placeholder="Search for employee"/>
+            <input type="text" name="searchKeyword" class="form-control mr-2" placeholder="Search for employee"/>
             <button class="btn btn-outline-primary">Search</button>
         </form>
     </div>
