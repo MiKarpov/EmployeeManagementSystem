@@ -4,7 +4,7 @@ public enum Role {
 
     PROJECT_MANAGER("Project Manager"), TEAM_MEMBER ("Team Member");
 
-    public static final Role[] ALL = {PROJECT_MANAGER, TEAM_MEMBER};
+    public static final Role[] ALL_ROLES = {PROJECT_MANAGER, TEAM_MEMBER};
 
     private String label;
 

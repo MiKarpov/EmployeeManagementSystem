@@ -36,13 +36,13 @@ public class EmployeeController {
         Pageable pageable = getPageable(page, size);
 
         Page<EmployeeDTO> employeePage;
-        if (!searchKeyword.isPresent()) {
-            employeePage = employeeService.findAllPaginated(pageable);
-        }
-        else {
+        if (searchKeyword.isPresent()) {
             String trimmed = searchKeyword.get().trim();
             employeePage = employeeService.findAllPaginated(trimmed, pageable);
             model.addAttribute("searchKeyword", trimmed);
+        }
+        else {
+            employeePage = employeeService.findAllPaginated(pageable);
         }
 
         model.addAttribute("employeePage", employeePage);
@@ -54,7 +54,6 @@ public class EmployeeController {
                     .collect(Collectors.toList());
             model.addAttribute("pageNumbers", pageNumbers);
         }
-
         return "employee-list";
     }
 
@@ -97,6 +96,6 @@ public class EmployeeController {
 
     @ModelAttribute
     public void populateRoles(Model model) {
-        model.addAttribute("allRoles", Arrays.asList(Role.ALL));
+        model.addAttribute("allRoles", Arrays.asList(Role.ALL_ROLES));
     }
 }
