@@ -5,49 +5,102 @@
 
 <div th:replace="fragments/components.html :: navbar"></div>
 
-<div class="container">
-
-    <div th:if="${searchQuery != null}">
-        <h2>Search Results for &apos;<span th:text="${searchQuery}" />&apos;</h2>
+<!-- Page title -->
+<div class="container mb-3">
+    <div class="d-flex justify-content-between">
+        <h2 th:if="${searchQuery != null}">Search Results for &apos;<span th:text="${searchQuery}"/>&apos;</h2>
+        <h2 th:if="${searchQuery == null}">List of Employees</h2>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#addNewEmployee">
+            <span class="h3">&#43;</span>
+        </button>
     </div>
-    <div th:unless="${searchQuery != null}">
-        <h2>List of Employees</h2>
-        <a class="btn btn-primary" th:href="@{/employee/add}">Add new employee</a>
-    </div>
-
-    <table th:fragment="employeesTable" class="table">
-        <thead>
-        <tr>
-            <th>#ID</th>
-            <th>Role</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:if="${employees.isEmpty()}">
-            <td colspan="5">No employees added yet</td>
-        </tr>
-        <tr th:each="employee : ${employees}">
-            <td th:text="${employee.id}"></td>
-            <td th:text="${employee.role.label}"></td>
-            <td th:text="${employee.firstName} + ' ' + ${employee.lastName}"></td>
-            <td th:text="${employee.email}"></td>
-            <td>
-                <div class="row">
-                        <span class="col"><a class="btn btn-success" th:href="@{/employee/{id}(id=${employee.id})}">
-                            Edit</a> </span>
-                    <form class="col" action="#" th:action="@{/employee/deleteBy(id=${employee.id})}" method="post">
-                        <button type="submit" class="btn btn-danger">
-                            Delete</button>
-                    </form>
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
 </div>
+
+<!-- addNewEmployee modal -->
+<div class="modal" id="addNewEmployee">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Employee</h5>
+                <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/employee}" th:object="${newEmployee}"
+                      action="#" method="post" id="addForm">
+                    <div class="form-group row">
+                        <label th:for="firstName" class="col-sm-4 col-form-label">First name</label>
+                        <input th:field="*{firstName}" type="text" class="col-sm-8 form-control"/>
+                    </div>
+                    <div class="form-group row">
+                        <label th:for="lastName" class="col-sm-4 col-form-label">Last name</label>
+                        <input th:field="*{lastName}" type="text" class="col-sm-8 form-control"/>
+                    </div>
+                    <div class="form-group row">
+                        <label th:for="email" class="col-sm-4 col-form-label">Email</label>
+                        <input th:field="*{email}" type="email" class="col-sm-8 form-control"/>
+                    </div>
+                    <div class="form-group row">
+                        <label th:for="role" class="col-sm-4 col-form-label">Role</label>
+                        <select th:field="*{role}" class="col-sm-8 form-control">
+                            <option th:each="role : ${allRoles}" th:value="${role}" th:text="${role.label}"></option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="addForm" class="btn btn-primary">Save</button>
+                <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- List of Employees -->
+<table th:fragment="employeesTable" class="container table">
+    <thead>
+    <tr>
+        <th>#ID</th>
+        <th>Role</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${employees.isEmpty()}">
+        <td colspan="5">No employees added yet</td>
+    </tr>
+    <tr th:each="employee : ${employees}">
+        <td th:text="${employee.id}"></td>
+        <td th:text="${employee.role.label}"></td>
+        <td th:text="${employee.firstName} + ' ' + ${employee.lastName}"></td>
+        <td th:text="${employee.email}"></td>
+        <td>
+            <div class="row">
+                <!-- //todo modal -->
+                    <span class="col"><a class="btn btn-success" th:href="@{/employee/{id}(id=${employee.id})}">
+                        Edit</a> </span>
+                <!-- //todo confirm removal -->
+                <form class="col" action="#" th:action="@{/employee/deleteBy(id=${employee.id})}" method="post">
+                    <button type="submit" class="btn btn-danger">
+                        Delete</button>
+                </form>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 
 </body>
 </html>

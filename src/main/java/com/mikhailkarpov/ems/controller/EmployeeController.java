@@ -62,6 +62,11 @@ public class EmployeeController {
     }
 
     @ModelAttribute
+    public void populateNewEmployee(Model model) {
+        model.addAttribute("newEmployee", new EmployeeDTO());
+    }
+
+    @ModelAttribute
     public void populateRoles(Model model) {
         model.addAttribute("allRoles", Arrays.asList(Role.ALL));
     }
