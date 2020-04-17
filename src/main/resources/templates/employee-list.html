@@ -81,7 +81,7 @@
                         <span class="col"><a class="btn btn-success" th:href="@{/employee/{id}(id=${employee.id})}">
                             Edit</a> </span>
                     <!-- //todo confirm removal -->
-                    <form class="col" action="#" th:action="@{/employee/deleteBy(id=${employee.id})}" method="post">
+                    <form class="col" action="#" th:action="@{/employee/delete(id=${employee.id})}" method="post">
                         <button type="submit" class="btn btn-danger">
                             Delete</button>
                     </form>

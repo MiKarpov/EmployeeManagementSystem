@@ -83,8 +83,8 @@ public class EmployeeController {
         return "employee";
     }
 
-    @PostMapping(value = "/deleteBy", params = {"id"})
-    public String deleteEmployeeById(@RequestParam Long id) {
+    @PostMapping(value = "/delete", params = {"id"})
+    public String deleteEmployee(@RequestParam Long id) {
         employeeService.deleteById(id);
         return "redirect:/employee";
     }
