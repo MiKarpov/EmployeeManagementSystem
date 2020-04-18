@@ -1,4 +1,4 @@
-package com.mikhailkarpov.ems.dto;
+package com.mikhailkarpov.ems.entity;
 
 public enum Role {
 

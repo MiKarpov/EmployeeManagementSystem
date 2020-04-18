@@ -15,7 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 
-import static com.mikhailkarpov.ems.dto.Role.PROJECT_MANAGER;
+import static com.mikhailkarpov.ems.entity.Role.PROJECT_MANAGER;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

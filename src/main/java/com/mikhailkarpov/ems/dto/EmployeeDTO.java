@@ -1,5 +1,7 @@
 package com.mikhailkarpov.ems.dto;
 
+import com.mikhailkarpov.ems.entity.Role;
+
 public class EmployeeDTO {
 
     private Long id;

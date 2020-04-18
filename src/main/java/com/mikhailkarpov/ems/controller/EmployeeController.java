@@ -1,8 +1,8 @@
 package com.mikhailkarpov.ems.controller;
 
 import com.mikhailkarpov.ems.dto.EmployeeDTO;
-import com.mikhailkarpov.ems.dto.Role;
-import com.mikhailkarpov.ems.service.EmployeeService;
+import com.mikhailkarpov.ems.entity.Role;
+import com.mikhailkarpov.ems.service.EmployeeServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +21,9 @@ import java.util.stream.IntStream;
 public class EmployeeController {
 
     private static final int PAGE_SIZE = 10;
-    private EmployeeService employeeService;
+    private EmployeeServiceImpl employeeService;
 
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(EmployeeServiceImpl employeeService) {
         this.employeeService = employeeService;
     }
 

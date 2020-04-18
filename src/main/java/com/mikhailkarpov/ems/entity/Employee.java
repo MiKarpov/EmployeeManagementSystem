@@ -1,7 +1,5 @@
 package com.mikhailkarpov.ems.entity;
 
-import com.mikhailkarpov.ems.dto.Role;
-
 import javax.persistence.*;
 
 @Entity(name = "Employee")
