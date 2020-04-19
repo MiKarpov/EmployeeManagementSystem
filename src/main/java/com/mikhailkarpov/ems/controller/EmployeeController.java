@@ -61,13 +61,27 @@ public class EmployeeController {
         int currentPage = 0;
         int currentSize = PAGE_SIZE;
 
-        if (page != null && page.isPresent() && page.get() >= 0) {
+        if (page.isPresent() && page.get() >= 0) {
             currentPage = page.get();
         }
-        if (size != null && size.isPresent() && size.get() > 0) {
+        if (size.isPresent() && size.get() > 0) {
             currentSize = size.get();
         }
         return PageRequest.of(currentPage, currentSize);
+    }
+
+    @GetMapping("/save")
+    public String showSaveOrEditEmployeeForm(@RequestParam Optional<Long> id, Model model) {
+        EmployeeDTO employee;
+        if (id.isPresent()) {
+            employee = employeeService.findById(id.get());
+        }
+        else {
+            employee = new EmployeeDTO();
+        }
+        model.addAttribute("employee", employee);
+        model.addAttribute("allRoles", Role.ALL_ROLES);
+        return "employee";
     }
 
     @PostMapping
@@ -76,12 +90,12 @@ public class EmployeeController {
         return "redirect:/employee";
     }
 
-    @GetMapping("/{id}")
-    public String getEmployee(@PathVariable Long id, Model model) {
-        EmployeeDTO employee = employeeService.findById(id);
-        model.addAttribute("employee", employee);
-        return "employee";
-    }
+//    @GetMapping("/{id}")
+//    public String getEmployee(@PathVariable Long id, Model model) {
+//        EmployeeDTO employee = employeeService.findById(id);
+//        model.addAttribute("employee", employee);
+//        return "employee";
+//    }
 
     @PostMapping(value = "/delete", params = {"id"})
     public String deleteEmployee(@RequestParam Long id) {
@@ -89,13 +103,13 @@ public class EmployeeController {
         return "redirect:/employee";
     }
 
-    @ModelAttribute
-    public void populateNewEmployee(Model model) {
-        model.addAttribute("newEmployee", new EmployeeDTO());
-    }
+//    @ModelAttribute
+//    public void populateNewEmployee(Model model) {
+//        model.addAttribute("newEmployee", new EmployeeDTO());
+//    }
 
-    @ModelAttribute
-    public void populateRoles(Model model) {
-        model.addAttribute("allRoles", Arrays.asList(Role.ALL_ROLES));
-    }
+//    @ModelAttribute
+//    public void populateRoles(Model model) {
+//        model.addAttribute("allRoles", Arrays.asList(Role.ALL_ROLES));
+//    }
 }

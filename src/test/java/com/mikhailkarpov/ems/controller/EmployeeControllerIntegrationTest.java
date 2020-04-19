@@ -40,7 +40,6 @@ class EmployeeControllerIntegrationTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().attribute("employeePage", iterableWithSize(2)))
                 .andExpect(model().attribute("pageNumbers", hasSize(2)))
-                .andExpect(model().attributeExists("allRoles", "newEmployee"))
                 .andExpect(model().attributeDoesNotExist("searchKeyword"));
     }
 
@@ -119,12 +118,31 @@ class EmployeeControllerIntegrationTest {
     }
 
     @Test
-    public void givenId_whenGetEmployee_thenSuccess() throws Exception {
-        mockMvc.perform(get("/employee/{id}", 1L))
+    public void whenShowSaveOrEditEmployeeForm_withNoId_thenShowSaveForm() throws Exception {
+        mockMvc.perform(get("/employee/save"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("employee"))
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attribute("employee", hasProperty("id", is(1L))));
+                .andExpect(model().attribute("employee", hasProperty("id", nullValue())))
+                .andExpect(model().attribute("employee", hasProperty("firstName", nullValue())))
+                .andExpect(model().attribute("employee", hasProperty("lastName", nullValue())))
+                .andExpect(model().attribute("employee", hasProperty("email", nullValue())))
+                .andExpect(model().attribute("employee", hasProperty("role", nullValue())))
+                .andExpect(model().attributeExists("allRoles"));
+    }
+
+    @Test
+    public void whenShowSaveOrEditEmployeeForm_withId_thenShowEditForm() throws Exception {
+        mockMvc.perform(get("/employee/save?id=1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("employee"))
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attribute("employee", hasProperty("id", notNullValue())))
+                .andExpect(model().attribute("employee", hasProperty("firstName", notNullValue())))
+                .andExpect(model().attribute("employee", hasProperty("lastName", notNullValue())))
+                .andExpect(model().attribute("employee", hasProperty("email", notNullValue())))
+                .andExpect(model().attribute("employee", hasProperty("role", notNullValue())))
+                .andExpect(model().attributeExists("allRoles"));
     }
 
     @Test
