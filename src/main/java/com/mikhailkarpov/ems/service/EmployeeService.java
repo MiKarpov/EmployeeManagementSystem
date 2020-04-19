@@ -12,7 +12,7 @@ public interface EmployeeService {
 
     EmployeeDTO findById(Long id);
 
-    void save(EmployeeDTO employee);
+    EmployeeDTO save(EmployeeDTO employee);
 
     void deleteById(Long id);
 }

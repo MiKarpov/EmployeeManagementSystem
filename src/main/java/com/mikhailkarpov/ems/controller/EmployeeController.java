@@ -2,15 +2,17 @@ package com.mikhailkarpov.ems.controller;
 
 import com.mikhailkarpov.ems.dto.EmployeeDTO;
 import com.mikhailkarpov.ems.entity.Role;
-import com.mikhailkarpov.ems.service.EmployeeServiceImpl;
+import com.mikhailkarpov.ems.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,13 +23,13 @@ import java.util.stream.IntStream;
 public class EmployeeController {
 
     private static final int PAGE_SIZE = 10;
-    private EmployeeServiceImpl employeeService;
+    private EmployeeService employeeService;
 
-    public EmployeeController(EmployeeServiceImpl employeeService) {
+    @Autowired
+    public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 
-    @Deprecated
     @GetMapping
     public String getAllEmployees(@RequestParam Optional<String> searchKeyword,
                                   @RequestParam Optional<Integer> page,
@@ -85,31 +87,20 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public String saveEmployee(@ModelAttribute EmployeeDTO employee) {
+    public String saveEmployee(@Valid @ModelAttribute(value = "employee") EmployeeDTO employee,
+                               BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("employee", employee);
+            model.addAttribute("allRoles", Role.ALL_ROLES);
+            return "employee";
+        }
         employeeService.save(employee);
         return "redirect:/employee";
     }
 
-//    @GetMapping("/{id}")
-//    public String getEmployee(@PathVariable Long id, Model model) {
-//        EmployeeDTO employee = employeeService.findById(id);
-//        model.addAttribute("employee", employee);
-//        return "employee";
-//    }
-
-    @PostMapping(value = "/delete", params = {"id"})
+    @PostMapping(value = "/delete")
     public String deleteEmployee(@RequestParam Long id) {
         employeeService.deleteById(id);
         return "redirect:/employee";
     }
-
-//    @ModelAttribute
-//    public void populateNewEmployee(Model model) {
-//        model.addAttribute("newEmployee", new EmployeeDTO());
-//    }
-
-//    @ModelAttribute
-//    public void populateRoles(Model model) {
-//        model.addAttribute("allRoles", Arrays.asList(Role.ALL_ROLES));
-//    }
 }

@@ -2,12 +2,28 @@ package com.mikhailkarpov.ems.dto;
 
 import com.mikhailkarpov.ems.entity.Role;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class EmployeeDTO {
 
     private Long id;
+
+    @NotNull
+    @Size(min = 2, max = 20)
     private String firstName;
+
+    @NotNull
+    @Size(min = 2, max =20)
     private String lastName;
+
+    @NotBlank
+    @Email
     private String email;
+
+    @NotNull
     private Role role;
 
     public Long getId() {

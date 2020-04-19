@@ -1,16 +1,20 @@
 package com.mikhailkarpov.ems.entity;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @Entity(name = "Employee")
 @Table(name = "employees")
 public class Employee extends AbstractEntity {
 
     @Embedded
+    @Valid
     private EmployeeDetails details;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Column(name = "role")
+    @NotNull
     private Role role;
 
     protected Employee() {

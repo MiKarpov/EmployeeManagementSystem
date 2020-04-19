@@ -5,6 +5,7 @@ import com.mikhailkarpov.ems.entity.Employee;
 import com.mikhailkarpov.ems.entity.EmployeeDetails;
 import com.mikhailkarpov.ems.exception.EntityNotFoundException;
 import com.mikhailkarpov.ems.repository.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository employeeRepository;
 
+    @Autowired
     public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
@@ -42,8 +44,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void save(EmployeeDTO employee) {
-        employeeRepository.save(toEntity(employee));
+    public EmployeeDTO save(EmployeeDTO employee) {
+        Employee savedEmployee = employeeRepository.save(toEntity(employee));
+        return toDTO(savedEmployee);
     }
 
     @Override
