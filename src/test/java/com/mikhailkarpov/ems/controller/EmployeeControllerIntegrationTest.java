@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +33,11 @@ class EmployeeControllerIntegrationTest {
 
     @Test
     public void whenGetAllEmployees_thenRenderEmployeeList() throws Exception {
-        mockMvc.perform(get("/employee?page=1&size=3"))
+        MockHttpServletRequestBuilder getAllEmployees = get("/employee")
+                .param("page", "1")
+                .param("size", "3");
+
+        mockMvc.perform(getAllEmployees)
                 .andExpect(status().isOk())
                 .andExpect(view().name("employee-list"))
                 .andExpect(model().hasNoErrors())
@@ -45,11 +48,15 @@ class EmployeeControllerIntegrationTest {
 
     @Test
     public void whenSearchEmployee_thenRenderSearchResults() throws Exception {
-        mockMvc.perform(get("/employee?searchKeyword=ov&size=2"))
+        MockHttpServletRequestBuilder searchEmployee = get("/employee")
+                .param("searchKeyword", "ov")
+                .param("size", "3");
+
+        mockMvc.perform(searchEmployee)
                 .andExpect(status().isOk())
                 .andExpect(view().name("employee-list"))
                 .andExpect(model().hasNoErrors())
-                .andExpect(model().attribute("employeePage", iterableWithSize(2)))
+                .andExpect(model().attribute("employeePage", iterableWithSize(3)))
                 .andExpect(model().attribute("pageNumbers", hasSize(2)))
                 .andExpect(model().attribute("searchKeyword", is("ov")));
     }
@@ -57,14 +64,13 @@ class EmployeeControllerIntegrationTest {
     @Test
     @Transactional
     public void givenNewEmployee_whenSave_thenSaveAndRenderEmployeeList() throws Exception {
-        MockHttpServletRequestBuilder requestBuilder = post("/employee")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+        MockHttpServletRequestBuilder saveNewEmployee = post("/employee")
                 .param("firstName", "First Name")
                 .param("lastName", "Last Name")
                 .param("email", "Email")
                 .param("role", String.valueOf(PROJECT_MANAGER));
 
-        mockMvc.perform(requestBuilder)
+        mockMvc.perform(saveNewEmployee)
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/employee"));
 
@@ -89,7 +95,6 @@ class EmployeeControllerIntegrationTest {
     @Transactional
     public void givenExistingEmployee_whenSave_thenSaveAndRenderEmployeeList() throws Exception {
         MockHttpServletRequestBuilder requestBuilder = post("/employee")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "1")
                 .param("firstName", "Updated First Name")
                 .param("lastName", "Updated Last Name")
@@ -119,7 +124,9 @@ class EmployeeControllerIntegrationTest {
 
     @Test
     public void whenShowSaveOrEditEmployeeForm_withNoId_thenShowSaveForm() throws Exception {
-        mockMvc.perform(get("/employee/save"))
+        MockHttpServletRequestBuilder showSaveForm = get("/employee/save");
+
+        mockMvc.perform(showSaveForm)
                 .andExpect(status().isOk())
                 .andExpect(view().name("employee"))
                 .andExpect(model().hasNoErrors())
@@ -158,7 +165,10 @@ class EmployeeControllerIntegrationTest {
                 .setParameter("id", 1L);
         assertFalse(selectQuery.getResultList().isEmpty());
 
-        mockMvc.perform(post("/employee/delete?id=1"))
+        MockHttpServletRequestBuilder deleteEmployee = post("/employee/delete")
+                .param("id", "1");
+
+        mockMvc.perform(deleteEmployee)
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/employee"))
                 .andExpect(model().hasNoErrors());
