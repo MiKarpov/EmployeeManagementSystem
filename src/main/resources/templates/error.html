@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/components.html :: head" />
+<body>
+
+<div th:replace="fragments/components.html :: navbar"></div>
+
+<div class="container">
+    <h1 th:if="${status}">
+        <span th:text="${status}">Status code</span>
+        <span th:if="${error}" th:text="'(' + ${error} + ')'">Error</span>
+    </h1>
+
+    <p th:if="${timestamp}">
+        <strong>Occurred:</strong> <span th:text="${timestamp}">Timestamp</span>
+    </p>
+
+    <p th:if="${path}">
+        <strong>URL:</strong> <span th:text="${path}">URL</span>
+    </p>
+
+    <p th:if="${message} and  ${message.length() != 0}">
+        <strong>Message:</strong> <span th:text="${message}">Message</span>
+    </p>
+</div>
+</body>
+</html>
