@@ -1,9 +1,7 @@
 package com.mikhailkarpov.ems.controller;
 
-import com.mikhailkarpov.ems.dto.EmployeeDTO;
 import com.mikhailkarpov.ems.exception.EntityNotFoundException;
 import com.mikhailkarpov.ems.service.EmployeeService;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -81,7 +78,8 @@ class EmployeeControllerTest {
         when(employeeService.findById(anyLong())).thenThrow(EntityNotFoundException.class);
 
         mockMvc.perform(get("/employee/{id}", 1L))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("redirect:/employee"));
     }
 
     @Test
@@ -94,6 +92,5 @@ class EmployeeControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/employee"))
                 .andExpect(model().hasNoErrors());
-
     }
 }
