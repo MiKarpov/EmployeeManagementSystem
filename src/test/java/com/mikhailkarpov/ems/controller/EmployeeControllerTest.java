@@ -78,8 +78,7 @@ class EmployeeControllerTest {
         when(employeeService.findById(anyLong())).thenThrow(EntityNotFoundException.class);
 
         mockMvc.perform(get("/employee/{id}", 1L))
-                .andExpect(status().isNotFound())
-                .andExpect(view().name("redirect:/employee"));
+                .andExpect(status().isNotFound());
     }
 
     @Test

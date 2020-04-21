@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
 @RequestMapping("/employee")
 public class EmployeeController {
 
-    private static final int PAGE_SIZE = 10;
+    private static final int DEFAULT_PAGE_SIZE = 10;
     private EmployeeService employeeService;
 
     @Autowired
@@ -52,7 +52,7 @@ public class EmployeeController {
 
         int totalPages = employeePage.getTotalPages();
         if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.range(0, totalPages).boxed().collect(Collectors.toList());
+            List<Integer> pageNumbers = IntStream.range(1, totalPages + 1).boxed().collect(Collectors.toList());
             model.addAttribute("pageNumbers", pageNumbers);
         }
         return "employee-list";
@@ -60,7 +60,7 @@ public class EmployeeController {
 
     private Pageable getPageable(Optional<Integer> page, Optional<Integer> size) {
         int currentPage = 0;
-        int currentSize = PAGE_SIZE;
+        int currentSize = DEFAULT_PAGE_SIZE;
 
         if (page.isPresent() && page.get() >= 0) {
             currentPage = page.get();
