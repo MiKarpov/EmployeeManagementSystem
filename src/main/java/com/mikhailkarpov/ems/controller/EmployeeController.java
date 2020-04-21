@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -51,9 +52,7 @@ public class EmployeeController {
 
         int totalPages = employeePage.getTotalPages();
         if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.range(0, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
+            List<Integer> pageNumbers = IntStream.range(0, totalPages).boxed().collect(Collectors.toList());
             model.addAttribute("pageNumbers", pageNumbers);
         }
         return "employee-list";
@@ -75,32 +74,41 @@ public class EmployeeController {
     @GetMapping("/save")
     public String showSaveOrEditEmployeeForm(@RequestParam Optional<Long> id, Model model) {
         EmployeeDTO employee;
-        if (id.isPresent()) {
+        if (id.isPresent())
             employee = employeeService.findById(id.get());
-        }
-        else {
+        else
             employee = new EmployeeDTO();
-        }
-        model.addAttribute("employee", employee);
-        model.addAttribute("allRoles", Role.ALL_ROLES);
+
+        populateDefaultModel(model, employee);
         return "employee";
     }
 
     @PostMapping
     public String saveEmployee(@Valid @ModelAttribute(value = "employee") EmployeeDTO employee,
-                               BindingResult bindingResult, Model model) {
+                               BindingResult bindingResult,
+                               Model model,
+                               RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("employee", employee);
-            model.addAttribute("allRoles", Role.ALL_ROLES);
+            populateDefaultModel(model, employee);
             return "employee";
         }
+
         employeeService.save(employee);
+        redirectAttributes.addFlashAttribute("alertClass", "success");
+        redirectAttributes.addFlashAttribute("alertMsg", "User saved");
         return "redirect:/employee";
     }
 
     @PostMapping(value = "/delete")
-    public String deleteEmployee(@RequestParam Long id) {
+    public String deleteEmployee(@RequestParam Long id, final RedirectAttributes redirectAttributes) {
         employeeService.deleteById(id);
+        redirectAttributes.addFlashAttribute("alertClass", "success");
+        redirectAttributes.addFlashAttribute("alertMsg", "User deleted");
         return "redirect:/employee";
+    }
+
+    private void populateDefaultModel(Model model, EmployeeDTO employee) {
+        model.addAttribute("employee", employee);
+        model.addAttribute("allRoles", Role.ALL_ROLES);
     }
 }

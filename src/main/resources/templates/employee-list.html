@@ -7,6 +7,11 @@
 
 <!-- Page title -->
 <div class="container mb-3">
+
+    <div th:if="${alertMsg}" class="alert" th:classappend="'alert-' + ${alertClass}" th:text="${alertMsg}">
+        Alert message
+    </div>
+
     <div class="d-flex justify-content-between">
         <h2 th:if="${searchKeyword != null}">Search Results for &apos;<span th:text="${searchKeyword}"/>&apos;</h2>
         <h2 th:if="${searchKeyword == null}">List of Employees</h2>
