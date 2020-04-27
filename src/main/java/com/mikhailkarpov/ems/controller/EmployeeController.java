@@ -48,6 +48,8 @@ public class EmployeeController {
         }
 
         model.addAttribute("employeePage", employeePage);
+
+        model.addAttribute("employee", new EmployeeDTO());
         model.addAttribute("allRoles", Role.ALL_ROLES);
 
         int totalPages = employeePage.getTotalPages();
@@ -79,19 +81,17 @@ public class EmployeeController {
 
     @PostMapping
     public String saveEmployee(@Valid @ModelAttribute EmployeeDTO employee,
-                               BindingResult bindingResult,
-                               Model model,
+                               BindingResult result,
                                RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("alertClass", "danger");
-            //todo front-end validation
-            model.addAttribute("alertMsg", "User not saved due to errors");
-            return "employee";
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("alertClass", "danger");
+            redirectAttributes.addFlashAttribute("alertMsg", "employee not saved");
         }
-
-        employeeService.save(employee);
-        redirectAttributes.addFlashAttribute("alertClass", "success");
-        redirectAttributes.addFlashAttribute("alertMsg", "User saved");
+        else {
+            employeeService.save(employee);
+            redirectAttributes.addFlashAttribute("alertClass", "success");
+            redirectAttributes.addFlashAttribute("alertMsg", "employee saved");
+        }
         return "redirect:/employee";
     }
 
@@ -99,7 +99,7 @@ public class EmployeeController {
     public String deleteEmployee(@RequestParam Long id, final RedirectAttributes redirectAttributes) {
         employeeService.deleteById(id);
         redirectAttributes.addFlashAttribute("alertClass", "success");
-        redirectAttributes.addFlashAttribute("alertMsg", "User deleted");
+        redirectAttributes.addFlashAttribute("alertMsg", "Employee deleted");
         return "redirect:/employee";
     }
 
