@@ -12,7 +12,8 @@
 
 <body>
 
-<nav th:fragment="navbar" class="navbar navbar-expand-sm navbar-light bg-light mb-5">
+<!-- Navigation bar -->
+<nav th:fragment="navbar-fragment" class="navbar navbar-expand-sm navbar-light bg-light mb-5">
     <div class="container">
         <a class="navbar-brand" th:href="@{/employee}">Employee Management System</a>
         <form action="/employee" method="get" class="form-inline">
@@ -21,6 +22,72 @@
         </form>
     </div>
 </nav>
+
+<!-- Save employee modal -->
+<div th:fragment="save-employee-fragment" class="modal fade" id="edit-employee-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit employee</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="save-form" th:action="@{/employee}" method="post">
+                    <input type="hidden" id="id" name="id" value="">
+                    <div class="form-group">
+                        <label for="firstName" class="col-form-label">First name</label>
+                        <input type="text" id="firstName" name="firstName" value="" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName" class="col-form-label">Last name</label>
+                        <input type="text" id="lastName" name="lastName" value="" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-form-label">Email</label>
+                        <input type="text" id="email" name="email" value="" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="role" class="col-form-label">Role</label>
+                        <select id="role" name="role"/>
+                        <!-- //todo select option -->
+                        <option th:each="role : ${allRoles}" th:value="${role}" th:text="${role.label}"></option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger" form="save-form">Save</button>
+                <button type="button" class="btn" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirm delete modal -->
+<div th:fragment="confirm-delete-fragment" class="modal fade" id="confirm-delete-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete employee</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to permanently delete this employee?
+            </div>
+            <div class="modal-footer">
+                <form id="delete-form" th:action="@{/employee/delete}" method="post">
+                    <input type="hidden" id="deleteId" name="id" value="">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+                <button type="button" class="btn" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

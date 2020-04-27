@@ -15,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -32,15 +31,15 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public String getAllEmployees(@RequestParam Optional<String> searchKeyword,
-                                  @RequestParam Optional<Integer> page,
-                                  @RequestParam Optional<Integer> size,
+    public String getAllEmployees(@RequestParam(required = false) String searchKeyword,
+                                  @RequestParam(required = false) Integer page,
+                                  @RequestParam(required = false) Integer size,
                                   Model model) {
         Pageable pageable = getPageable(page, size);
 
         Page<EmployeeDTO> employeePage;
-        if (searchKeyword.isPresent()) {
-            String trimmed = searchKeyword.get().trim();
+        if (searchKeyword != null) {
+            String trimmed = searchKeyword.trim();
             employeePage = employeeService.findAllPaginated(trimmed, pageable);
             model.addAttribute("searchKeyword", trimmed);
         }
@@ -49,6 +48,7 @@ public class EmployeeController {
         }
 
         model.addAttribute("employeePage", employeePage);
+        model.addAttribute("allRoles", Role.ALL_ROLES);
 
         int totalPages = employeePage.getTotalPages();
         if (totalPages > 0) {
@@ -58,38 +58,34 @@ public class EmployeeController {
         return "employee-list";
     }
 
-    private Pageable getPageable(Optional<Integer> page, Optional<Integer> size) {
+    private Pageable getPageable(Integer page, Integer size) {
         int currentPage = 0;
         int currentSize = DEFAULT_PAGE_SIZE;
 
-        if (page.isPresent() && page.get() >= 0) {
-            currentPage = page.get();
+        if (page != null && page >= 0) {
+            currentPage = page;
         }
-        if (size.isPresent() && size.get() > 0) {
-            currentSize = size.get();
+        if (size != null && size > 0) {
+            currentSize = size;
         }
         return PageRequest.of(currentPage, currentSize);
     }
 
-    @GetMapping("/save")
-    public String showSaveOrEditEmployeeForm(@RequestParam Optional<Long> id, Model model) {
-        EmployeeDTO employee;
-        if (id.isPresent())
-            employee = employeeService.findById(id.get());
-        else
-            employee = new EmployeeDTO();
-
-        populateDefaultModel(model, employee);
-        return "employee";
+    @GetMapping("/getEmployee")
+    @ResponseBody
+    public EmployeeDTO getEmployee(Long id) {
+        return employeeService.findById(id);
     }
 
     @PostMapping
-    public String saveEmployee(@Valid @ModelAttribute(value = "employee") EmployeeDTO employee,
+    public String saveEmployee(@Valid @ModelAttribute EmployeeDTO employee,
                                BindingResult bindingResult,
                                Model model,
                                RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            populateDefaultModel(model, employee);
+            model.addAttribute("alertClass", "danger");
+            //todo front-end validation
+            model.addAttribute("alertMsg", "User not saved due to errors");
             return "employee";
         }
 
@@ -107,8 +103,4 @@ public class EmployeeController {
         return "redirect:/employee";
     }
 
-    private void populateDefaultModel(Model model, EmployeeDTO employee) {
-        model.addAttribute("employee", employee);
-        model.addAttribute("allRoles", Role.ALL_ROLES);
-    }
 }
