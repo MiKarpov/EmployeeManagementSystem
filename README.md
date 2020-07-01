@@ -13,20 +13,27 @@ Simple CRUD web app.
 ## Setup
 
 Create MYSQL database and user:
+
 ```
 CREATE DATABASE IF NOT EXISTS `employeedb`;
 CREATE USER IF NOT EXISTS 'java'@'localhost' IDENTIFIED BY 'javapassword';
 GRANT ALL PRIVILEGES ON employeedb.* TO 'java'@'localhost';
 ```
 
-Clone repository and run with spring boot maven plugin:
+Clone repository to your local machine and run with Spring Boot Maven Plugin:
+
 ```
 git clone https://github.com/mikhail-karpov/employee-management-system.git
 cd employee-management-system
 mvn spring-boot:run
 ```
-Note that the database table will be created and populated with the source data every time you launch the app. 
-If you want to disable this feature, update the application.properties file:
+
+Open new tab in your browser on `http://localhost:8080/`
+
+Spring Boot automatically creates schema with DDL and DML scripts in `schema.sql` 
+and `data.sql` files. If you want to disable this feature every time on start up, 
+comment out or delete this line in `application.properties` file:
+
 ```
-spring.jpa.generate-ddl=false
+spring.datasource.initialization-mode=always
 ```
